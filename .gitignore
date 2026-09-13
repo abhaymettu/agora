@@ -15,3 +15,7 @@ __pycache__/
 .remember/
 .specify/memory/.constitution-template.json
 .playwright-mcp/
+
+# Sweep stdout transcripts. The .jsonl records beside them carry the same runs,
+# with more in each row; these are regenerable by re-running notes/discover.py.
+notes/discovery/*.log
