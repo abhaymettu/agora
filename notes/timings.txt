@@ -1,4 +1,13 @@
-mode  size     profiles  variables status     seconds  note
-scf   2v3c           36        108 unsat         0.07  
-scf   3v3c          216        648 unsat         0.60  
-scf   4v3c        1,296      3,888 unsat         5.18  
+mode  size    profiles  variables status     seconds  note
+scf   2v3c         36        108 unsat         0.07  
+scf   3v3c        216        648 unsat         0.57  
+scf   4v3c      1,296      3,888 unsat         5.08  
+scf   2v4c        576      2,304 unsat         8.07  
+scf   3v4c     13,824     55,296 unknown      57.15  encoding budget, clauses
+scf   4v4c    331,776  1,327,104 unknown       0.00  refused up front
+swf   2v3c         36        216 unsat         0.11  
+swf   3v3c        216      1,296 unsat         2.53  
+swf   4v3c      1,296      7,776 unsat        77.08  
+swf   2v4c        576      6,912 unsat        48.75  
+swf   3v4c     13,824    165,888 unknown      53.71  encoding budget, clauses
+swf   4v4c    331,776  3,981,312 unknown       0.00  refused up front
