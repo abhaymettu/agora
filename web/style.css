@@ -119,6 +119,13 @@ button.go {
   transition: background 140ms ease, transform 120ms var(--ease-out), opacity 140ms ease;
 }
 button.go:active { transform: scale(0.985); }
+/* The picker is taller than most laptop viewports, so Mint is a bar pinned to the
+   bottom of the pane and the list scrolls under it. */
+.ask { padding-bottom: 0; }
+.ask button.go { position: sticky; bottom: 0; margin: 0 -22px; width: calc(100% + 44px); padding: 14px;
+  border-width: 1px 0 0; border-radius: 0; background: #0e0e10; }
+.ask button.go:hover:not(:disabled) { background: #19191b; }
+.ask .err { position: sticky; bottom: 50px; margin: 0; padding: 8px 0; background: var(--bg); }
 button.go:disabled { opacity: 0.45; cursor: default; transform: none; }
 button.small {
   padding: 6px 11px;
@@ -295,4 +302,5 @@ pre.raw { font-family: var(--mono); font-size: 11.5px; color: var(--dim); white-
   .ask { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 24px; }
   .pane { overflow: visible; }
   .stage { min-height: 60dvh; }
+  .ask button.go { position: static; margin: 0; width: 100%; padding: 11px; border-width: 1px; border-radius: 10px; }
 }

@@ -119,12 +119,17 @@ class Handler(SimpleHTTPRequestHandler):
 
     # -- plumbing -----------------------------------------------------------
 
+    def end_headers(self) -> None:
+        # Static files carry Last-Modified and nothing else, so a browser would
+        # keep serving yesterday's app.js. Everything revalidates, every time.
+        self.send_header("Cache-Control", "no-cache")
+        super().end_headers()
+
     def send_json(self, payload: dict, status: int = 200) -> None:
         raw = json.dumps(payload).encode()
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(raw)))
-        self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(raw)
 

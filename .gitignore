@@ -14,3 +14,4 @@ __pycache__/
 .specify/integration.json
 .remember/
 .specify/memory/.constitution-template.json
+.playwright-mcp/

@@ -274,9 +274,11 @@ function scores(ballots, candidates) {
     const wins = ballots.filter((x) => x.split(" > ").indexOf(a) < x.split(" > ").indexOf(b)).length;
     if (2 * wins > ballots.length) beats[a]++;
   }
-  const best = (t) => cands.slice().sort((x, y) => t[y] - t[x] || (x < y ? -1 : 1));
+  // A tied score is reported as a tie, never broken alphabetically: the rule under
+  // test is resolute, and a tie-break would invent a disagreement that is not there.
+  const top = (t) => { const s = cands.slice().sort((x, y) => t[y] - t[x]); return t[s[0]] === t[s[1]] ? "tie" : s[0]; };
   const condorcet = cands.find((c) => beats[c] === candidates - 1);
-  return { plurality: best(plurality), borda: best(borda), condorcet };
+  return { plurality: top(plurality), borda: top(borda), condorcet };
 }
 
 function runPlayground() {
@@ -286,16 +288,17 @@ function runPlayground() {
   const s = scores(ballots, r.candidates);
   const mine = r.mode === "scf" ? outcome : outcome.split(" > ")[0];
   const agrees = [
-    ["plurality", s.plurality[0]],
-    ["borda", s.borda[0]],
+    ["plurality", s.plurality],
+    ["borda", s.borda],
     ["condorcet winner", s.condorcet || "none"],
   ];
+  const settled = agrees.filter(([, v]) => v !== "none" && v !== "tie");
   $("verdict-out").innerHTML = `
     <div class="outcome"><span class="faint">your rule ${r.mode === "scf" ? "elects" : "ranks"}</span>
       <span class="big">${esc(outcome)}</span>
-      ${agrees.every(([, v]) => v === mine || v === "none")
+      ${settled.every(([, v]) => v === mine)
         ? `<span class="agree">&#10003; agrees with all three</span>`
-        : `<span class="agree">&#9679; differs from ${esc(agrees.filter(([, v]) => v !== mine && v !== "none").map(([k]) => k).join(", "))}</span>`}
+        : `<span class="agree">&#9679; differs from ${esc(settled.filter(([, v]) => v !== mine).map(([k]) => k).join(", "))}</span>`}
     </div>
     <div class="compare">${agrees.map(([k, v]) =>
       `<div><span class="cl">${esc(k)}</span><span class="cv">${esc(v)}</span></div>`).join("")}</div>`;
@@ -309,14 +312,14 @@ function findDisagreement() {
     const outcome = r.rule.table[key];
     const mine = r.mode === "scf" ? outcome : outcome.split(" > ")[0];
     const s = scores(ballots, r.candidates);
-    if (s.plurality[0] !== mine || (s.condorcet && s.condorcet !== mine)) {
+    if ([s.plurality, s.borda, s.condorcet].some((v) => v && v !== "tie" && v !== mine)) {
       ballots.forEach((b, i) => ($("b" + i).selectedIndex = options.indexOf(b)));
       return runPlayground();
     }
   }
   $("verdict-out").insertAdjacentHTML("beforeend",
     `<p class="faint" style="font-size:12px;margin-bottom:0">No profile of this electorate where the rule
-     parts company with plurality or the Condorcet winner. It agrees with them everywhere.</p>`);
+     parts company with plurality, Borda or the Condorcet winner, ties aside. It agrees with them everywhere.</p>`);
 }
 
 // -- free-form entry --------------------------------------------------------

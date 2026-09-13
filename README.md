@@ -76,8 +76,8 @@ Measured numbers per size are in `notes/timings.txt`.
 **What it does not do.** Ties, indifference, and irresolute rules are out of scope:
 ballots and social rankings are strict, and a voting rule elects exactly one winner.
 There are no domain restrictions, so no single-peaked preferences. Nine axioms, listed
-below, and no way to add a tenth except by writing it in the DSL, which is the
-intended way.
+below. A tenth can be written in the DSL directly, or typed in English on the demo page,
+where a local model drafts the formula and five checks decide whether it counts.
 
 ## Running it
 
@@ -89,7 +89,21 @@ python -m core derive --mode scf --voters 3 condorcet strategyproof
 python -m unittest discover -s tests -t .
 ```
 
-z3-solver is the only dependency. Nothing here calls a network or a model.
+z3-solver is the only dependency. The core calls no network and no model.
+
+## The demo page
+
+```
+python -m web            # http://127.0.0.1:8000
+```
+
+Pick the properties, mint, and stress-test the rule you get back on elections you type
+in. Free-form entry needs a local model server as well (`notes/BUILD-WEB.md` has the
+command); without one the page says so and everything else still works. Nothing the
+model writes reaches the solver until it has parsed, sort-checked, grounded, and been
+shown satisfiable and non-vacuous, and the page shows which named rules it accepts
+and rejects, because the checks prove the formula is well formed, not that it means
+what you typed.
 
 ## The axiom library
 
