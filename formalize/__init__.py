@@ -24,10 +24,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, fields
 
-from core import Axiom, Electorate, ParseError, derive, parse_formula, reference_rules
-from core.dsl import Not
-from core.ground import Context, GroundError, encode
-from core.rules import Rule
+from core import (Axiom, Electorate, GroundError, ParseError, Rule, derive, parse_formula,
+                  reference_rules)
+from core.ground import Context, encode  # not in core.__all__; the only reach past it
 
 from .grammar import SortError, check
 from .model import ModelUnavailable, health, propose
@@ -137,7 +136,7 @@ def vet(formula: str, mode: str, text: str = "", name: str = "custom",
     # negation is satisfiable the axiom rules something out; if it is not, the
     # axiom is true of every rule there is and constrains nothing.
     negation = Axiom(name=f"not_{p.name}", modes=(mode,), english="",
-                     bodies={mode: Not(tree)})
+                     bodies={mode: parse_formula(f"not ({p.formula})")})
     against = derive([negation], GATE_VOTERS, GATE_CANDIDATES, mode=mode, timeout=20.0,
                      minimise=False, degrade=False)
     if against.status != "sat":

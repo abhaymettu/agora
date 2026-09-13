@@ -107,15 +107,19 @@ def prompt(mode: str) -> list:
 
 def _flatten(axiom, mode: str) -> str:
     """The axiom's own source line for this mode, as one line."""
-    from core.dsl import _logical_lines
     from core.solve import AXIOM_FILE
 
-    want, inside = f"{mode} ", False
-    for _, raw in _logical_lines(AXIOM_FILE.read_text()):
-        if raw.startswith("axiom "):
-            inside = raw[6:].strip() == axiom.name
-        elif inside and raw.startswith(want):
-            return raw[len(want) :].strip()
+    want, inside, buf = f"{mode} ", False, ""
+    for raw in AXIOM_FILE.read_text().splitlines():
+        line = buf + raw.split("#", 1)[0].strip()
+        buf = ""
+        if line.endswith("\\"):          # the file wraps long formulas
+            buf = line[:-1].strip() + " "
+            continue
+        if line.startswith("axiom "):
+            inside = line[6:].strip() == axiom.name
+        elif inside and line.startswith(want):
+            return line[len(want) :].strip()
     raise KeyError(f"{axiom.name} has no {mode} line")
 
 
