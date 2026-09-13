@@ -2,3 +2,15 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# spec-kit scaffolding: regenerable with `specify init`.
+# The thinking it produced is tracked, in specs/ and .specify/memory/.
+.claude/skills/speckit-*
+.specify/templates/
+.specify/scripts/
+.specify/workflows/
+.specify/integrations/
+.specify/init-options.json
+.specify/integration.json
+.remember/
+.specify/memory/.constitution-template.json
