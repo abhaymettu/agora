@@ -95,7 +95,7 @@ electorate, does any rule at all satisfy these axioms?
 
 **Out of scope.** Ties, indifference and irresolute rules: ballots and social rankings
 are strict, and a rule elects exactly one winner. No domain restrictions, so no
-single-peaked preferences. Nine axioms, listed below; a tenth can be written in the
+single-peaked preferences. Fifteen axioms, listed below; a sixteenth can be written in the
 DSL.
 
 ## Sizes and timings
@@ -144,7 +144,7 @@ python -m web            # http://127.0.0.1:8000
 
 ## The axiom library
 
-Nine axioms. Each says which rule kinds it is defined for: `scf` elects a single
+Fifteen axioms. Each says which rule kinds it is defined for: `scf` elects a single
 winner, `swf` produces a social ranking.
 
 | axiom | kinds | |
@@ -158,6 +158,12 @@ winner, `swf` produces a social ranking.
 | `iia` | swf | how society ranks a against b depends only on how the voters rank a against b |
 | `anonymous` | swf, scf | the outcome depends on which ballots were cast, not on who cast them |
 | `neutral` | swf, scf | relabelling the candidates relabels the outcome and changes nothing else |
+| `unanimity` | swf, scf | a candidate every voter puts first comes out on top |
+| `majority` | swf, scf | a candidate put first by more than half the voters comes out on top |
+| `condorcetloser` | swf, scf | a candidate who loses every head to head comes out last |
+| `topsonly` | scf | only first choices count; the rest of every ballot is ignored |
+| `maskinmonotone` | scf | a winner nobody has demoted against anyone is still the winner |
+| `reversal` | scf | turning every ballot upside down never leaves the same candidate winning |
 
 Pareto is load-bearing and not decoration. Ask for `iia`, `surjective` and
 `nondictatorial` alone and the answer is a *satisfying* rule, the inverse dictator,
@@ -166,7 +172,7 @@ There is a test for exactly this.
 
 ## The axiom DSL
 
-Axioms are data, not Python. `core/axioms.agora` holds all nine:
+Axioms are data, not Python. `core/axioms.agora` holds all fifteen:
 
 ```
 axiom strategyproof

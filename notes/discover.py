@@ -1,10 +1,11 @@
 """The discovery sweep: what the core says about axiom sets nobody aimed it at.
 
-Three questions, three subcommands, one JSON line per question asked.
+Four questions, four subcommands, one JSON line per question asked.
 
     PYTHONPATH=. python notes/discover.py mus      --mode scf --voters 3 --candidates 3 --max-size 3
     PYTHONPATH=. python notes/discover.py frontier --mode scf pareto strategyproof
     PYTHONPATH=. python notes/discover.py count    --mode scf --voters 3 --candidates 3 anonymous neutral
+    PYTHONPATH=. python notes/discover.py implies  --mode scf --voters 3 --candidates 3
 
 mus         every minimal inconsistent subset of the library, by level, pruning
             supersets of impossibilities already found
@@ -12,6 +13,8 @@ frontier    one axiom set, walked up through electorate sizes until it stops
             resolving
 count       how many distinct rules satisfy one axiom set, enumerated by
             blocking each model found
+implies     which axioms are stronger than which at this size, which is what says
+            how much of a list of impossibilities is one theorem restated
 
 Records go to notes/discovery/<tag>.jsonl and are appended, never rewritten, so
 a run that dies part way leaves what it got. Every record carries the size, the

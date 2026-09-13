@@ -1,0 +1,129 @@
+[
+  {
+    "voters": 2,
+    "candidates": 3,
+    "impossible": false
+  },
+  {
+    "voters": 3,
+    "candidates": 3,
+    "impossible": true,
+    "tops": "ABC",
+    "witness": {
+      "A": "A > B > C | B > C > A | C > B > A",
+      "B": "A > C > B | B > A > C | C > A > B",
+      "C": "A > B > C | B > A > C | C > A > B"
+    }
+  },
+  {
+    "voters": 4,
+    "candidates": 3,
+    "impossible": false
+  },
+  {
+    "voters": 5,
+    "candidates": 3,
+    "impossible": true,
+    "tops": "AABBC",
+    "witness": {
+      "A": "A > B > C | A > B > C | B > C > A | B > C > A | C > B > A",
+      "B": "A > C > B | A > C > B | B > A > C | B > A > C | C > A > B",
+      "C": "A > B > C | A > B > C | B > A > C | B > A > C | C > A > B"
+    }
+  },
+  {
+    "voters": 6,
+    "candidates": 3,
+    "impossible": true,
+    "tops": "AABBCC",
+    "witness": {
+      "A": "A > B > C | A > B > C | B > C > A | B > C > A | C > B > A | C > B > A",
+      "B": "A > C > B | A > C > B | B > A > C | B > A > C | C > A > B | C > A > B",
+      "C": "A > B > C | A > B > C | B > A > C | B > A > C | C > A > B | C > A > B"
+    }
+  },
+  {
+    "voters": 7,
+    "candidates": 3,
+    "impossible": true,
+    "tops": "AAABBBC",
+    "witness": {
+      "A": "A > B > C | A > B > C | A > B > C | B > C > A | B > C > A | B > C > A | C > B > A",
+      "B": "A > C > B | A > C > B | A > C > B | B > A > C | B > A > C | B > A > C | C > A > B",
+      "C": "A > B > C | A > B > C | A > B > C | B > A > C | B > A > C | B > A > C | C > A > B"
+    }
+  },
+  {
+    "voters": 2,
+    "candidates": 4,
+    "impossible": false
+  },
+  {
+    "voters": 3,
+    "candidates": 4,
+    "impossible": true,
+    "tops": "ABC",
+    "witness": {
+      "A": "A > B > C > D | B > C > D > A | C > B > D > A",
+      "B": "A > C > D > B | B > A > C > D | C > A > D > B",
+      "C": "A > B > D > C | B > A > D > C | C > A > B > D",
+      "D": "A > B > C > D | B > A > C > D | C > A > B > D"
+    }
+  },
+  {
+    "voters": 4,
+    "candidates": 4,
+    "impossible": true,
+    "tops": "ABCD",
+    "witness": {
+      "A": "A > B > C > D | B > C > D > A | C > B > D > A | D > B > C > A",
+      "B": "A > C > D > B | B > A > C > D | C > A > D > B | D > A > C > B",
+      "C": "A > B > D > C | B > A > D > C | C > A > B > D | D > A > B > C",
+      "D": "A > B > C > D | B > A > C > D | C > A > B > D | D > A > B > C"
+    }
+  },
+  {
+    "voters": 5,
+    "candidates": 4,
+    "impossible": true,
+    "tops": "AABBC",
+    "witness": {
+      "A": "A > B > C > D | A > B > C > D | B > C > D > A | B > C > D > A | C > B > D > A",
+      "B": "A > C > D > B | A > C > D > B | B > A > C > D | B > A > C > D | C > A > D > B",
+      "C": "A > B > C > D | A > B > D > C | B > A > D > C | B > A > D > C | C > A > B > D",
+      "D": "A > B > C > D | A > B > C > D | B > A > C > D | B > A > C > D | C > A > B > D"
+    }
+  },
+  {
+    "voters": 2,
+    "candidates": 5,
+    "impossible": false
+  },
+  {
+    "voters": 3,
+    "candidates": 5,
+    "impossible": true,
+    "tops": "ABC",
+    "witness": {
+      "A": "A > B > C > D > E | B > C > D > E > A | C > B > D > E > A",
+      "B": "A > C > D > E > B | B > A > C > D > E | C > A > D > E > B",
+      "C": "A > B > D > E > C | B > A > D > E > C | C > A > B > D > E",
+      "D": "A > B > C > D > E | B > A > C > E > D | C > A > B > E > D",
+      "E": "A > B > C > D > E | B > A > C > D > E | C > A > B > D > E"
+    }
+  },
+  {
+    "voters": 3,
+    "candidates": 6,
+    "impossible": true,
+    "tops": "ABC",
+    "witness": {
+      "A": "A > B > C > D > E > F | B > C > D > E > F > A | C > B > D > E > F > A",
+      "B": "A > C > D > E > F > B | B > A > C > D > E > F | C > A > D > E > F > B",
+      "C": "A > B > D > E > F > C | B > A > D > E > F > C | C > A > B > D > E > F",
+      "D": "A > B > C > D > E > F | B > A > C > E > F > D | C > A > B > E > F > D",
+      "E": "A > B > C > D > E > F | B > A > C > D > F > E | C > A > B > D > F > E",
+      "F": "A > B > C > D > E > F | B > A > C > D > E > F | C > A > B > D > E > F"
+    }
+  }
+]
