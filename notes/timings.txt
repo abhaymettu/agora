@@ -1,4 +1,5 @@
-Traceback (most recent call last):
-  File "/private/tmp/claude-501/-Users-abhay-code-agora/52b8ee49-0e4d-473c-926a-f980928935da/scratchpad/sweep.py", line 2, in <module>
-    from core import derive
-ModuleNotFoundError: No module named 'core'
+mode  size     profiles  variables status     seconds  note
+scf   2v3c           36        108 unsat         0.07  
+scf   3v3c          216        648 unsat         0.57  
+scf   4v3c        1,296      3,888 unsat         5.10  
+scf   2v4c          576      2,304 unsat         8.01  
