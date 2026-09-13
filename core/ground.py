@@ -14,6 +14,7 @@ Two families of decision variable, one per rule kind:
 from __future__ import annotations
 
 import math
+import time
 from itertools import product
 
 import z3
@@ -24,6 +25,16 @@ from .domain import Electorate
 
 class GroundError(Exception):
     pass
+
+
+class GroundTimeout(Exception):
+    """The formula was still being built when the budget ran out.
+
+    Grounding is Python, not Z3, so a solver timeout cannot interrupt it. A
+    quantifier over pairs of profiles is quadratic, and at four candidates and
+    three voters that is billions of iterations. This is how the budget is kept
+    even when nothing has reached the solver yet.
+    """
 
 
 # -- boolean constructors that fold Python bools ---------------------------
@@ -81,25 +92,33 @@ def mk_iff(a, b):
 
 
 class Context:
-    """The decision variables for one electorate and one rule kind."""
+    """The decision variables for one electorate and one rule kind.
 
-    def __init__(self, elec: Electorate, mode: str) -> None:
+    Each context owns a private Z3 context. Z3's default context is global, so
+    two identical calls in one process can be handed different AST ids by
+    whatever ran between them, and come back with different (equally valid)
+    models. Isolating it is what makes a question have one answer.
+    """
+
+    def __init__(self, elec: Electorate, mode: str, deadline: float | None = None) -> None:
         if mode not in dsl.MODES:
             raise GroundError(f"unknown mode {mode!r}")
         self.elec = elec
         self.mode = mode
+        self.deadline = deadline
+        self.z3ctx = z3.Context()
         self.pid = {p: n for n, p in enumerate(elec.profiles)}
         self.vars: dict[tuple, z3.BoolRef] = {}
         if mode == "scf":
             for p in elec.profiles:
                 for c in elec.cands:
-                    self.vars[(p, c)] = z3.Bool(f"w{self.pid[p]}_{c}")
+                    self.vars[(p, c)] = z3.Bool(f"w{self.pid[p]}_{c}", self.z3ctx)
         else:
             for p in elec.profiles:
                 for a in elec.cands:
                     for b in elec.cands:
                         if a != b:
-                            self.vars[(p, a, b)] = z3.Bool(f"r{self.pid[p]}_{a}_{b}")
+                            self.vars[(p, a, b)] = z3.Bool(f"r{self.pid[p]}_{a}_{b}", self.z3ctx)
 
     @property
     def var_count(self) -> int:
@@ -214,8 +233,14 @@ def _ground_quant(node: dsl.Quant, ctx: Context, env: dict):
     domains = [_domain(ctx, s) for _, s in node.binds]
     forall = node.kind == "forall"
     parts = []
+    ticks = 0
     try:
         for combo in product(*domains):
+            ticks += 1
+            if ctx.deadline is not None and not ticks % 65536 and time.perf_counter() > ctx.deadline:
+                raise GroundTimeout(
+                    f"still expanding forall over {len(domains)} sorts after the budget ran out"
+                )
             for n, v in zip(names, combo):
                 env[n] = v
             f = ground(node.body, ctx, env)
@@ -283,6 +308,8 @@ class ConcreteContext(Context):
         self.mode = mode
         self.table = table
         self.vars = {}
+        self.deadline = None
+        self.z3ctx = None
 
     def wins(self, p, c):
         return self.table[p] == c

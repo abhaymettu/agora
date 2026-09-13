@@ -123,6 +123,24 @@ class SmallerTheorems(unittest.TestCase):
         self.assertNotIn("surjective", r.core)
 
 
+class Budget(unittest.TestCase):
+    """A run that cannot finish says so, and says what it did establish."""
+
+    def test_a_budget_that_cannot_be_met_degrades_to_a_smaller_electorate(self):
+        r = derive(ARROW, 4, 3, mode="swf", timeout=5)
+        self.assertEqual(r.status, "unknown")
+        self.assertIsNone(r.core)
+        self.assertIsNotNone(r.partial)
+        self.assertEqual(r.partial.voters, 3)
+        self.assertEqual(r.partial.status, "unsat")
+        self.assertIn("nothing here shows it carries up to 4", r.note)
+
+    def test_an_electorate_too_big_to_encode_is_refused_up_front(self):
+        r = derive(["pareto"], 4, 4, mode="swf", degrade=False)
+        self.assertEqual(r.status, "unknown")
+        self.assertIn("not attempted", r.note)
+
+
 class Frame(unittest.TestCase):
     """The base constraints hold, and never turn up as somebody's axiom."""
 
@@ -145,7 +163,14 @@ class Frame(unittest.TestCase):
 
 class Interface(unittest.TestCase):
     def test_the_same_question_gives_the_same_rule(self):
+        """Including when unrelated work happens in between.
+
+        Z3's default context is global, so without isolation the answer to a
+        question depends on what the process asked before it. It does not.
+        """
         a = derive(["strategyproof", "surjective"], 2, 3, mode="scf")
+        derive(["anonymous", "neutral"], 3, 3, mode="scf")
+        derive(ARROW, 2, 3, mode="swf")
         b = derive(["strategyproof", "surjective"], 2, 3, mode="scf")
         self.assertEqual(a.rule.table, b.rule.table)
 

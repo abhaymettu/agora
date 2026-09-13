@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-abhay-code-agora/52b8ee49-0e4d-473c-926a-f980928935da/scratchpad/sweep.py", line 2, in <module>
+    from core import derive
+ModuleNotFoundError: No module named 'core'

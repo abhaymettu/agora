@@ -25,7 +25,7 @@ import z3
 from . import rules
 from .domain import Electorate
 from .dsl import Axiom, parse_axioms
-from .ground import Context, encode, estimate_vars, frame
+from .ground import Context, GroundTimeout, encode, estimate_vars, frame
 
 AXIOM_FILE = Path(__file__).with_name("axioms.agora")
 
@@ -109,7 +109,8 @@ def derive(
     voters      number of voters
     candidates  number of candidates
     mode        "scf" (elect one winner) or "swf" (produce a social ranking)
-    timeout     seconds for the whole call, minimisation included
+    timeout     seconds for this electorate, minimisation included; if the run
+                degrades to a smaller electorate, that attempt gets its own budget
     minimise    shrink an unsat core to a minimal one
     verify      re-check every rule handed back against its axioms, without the solver
     degrade     on timeout, report the largest smaller electorate that resolved
@@ -139,14 +140,24 @@ def derive(
 
     started = time.perf_counter()
     elec = Electorate(voters, candidates)
-    ctx = Context(elec, mode)
-    solver = z3.Solver()
+    ctx = Context(elec, mode, deadline=started + timeout)
+    solver = z3.Solver(ctx=ctx.z3ctx)
+    solver.set("random_seed", 0)
     solver.add(frame(ctx))
     sel = {}
-    for ax in picked:
-        s = z3.Bool(f"sel!{ax.name}")
-        sel[ax.name] = s
-        solver.add(z3.Implies(s, encode(ax, ctx)))
+    try:
+        for ax in picked:
+            s = z3.Bool(f"sel!{ax.name}", ctx.z3ctx)
+            sel[ax.name] = s
+            solver.add(z3.Implies(s, encode(ax, ctx)))
+    except GroundTimeout as exc:
+        base.elapsed = time.perf_counter() - started
+        base.note = (
+            f"the encoding itself did not finish inside {timeout:g}s over {profiles:,} "
+            f"profiles ({exc}); the solver was never reached, so nothing is claimed "
+            f"either way at this size"
+        )
+        return _degraded(base, axioms, mode, timeout, minimise, verify) if degrade else base
 
     def check(active):
         left = timeout - (time.perf_counter() - started)
