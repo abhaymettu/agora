@@ -1,0 +1,78 @@
+# The axiom library.
+#
+# Two rule kinds:
+#   scf  a profile elects one winner            variable: wins(p, c)
+#   swf  a profile produces a social ranking    variable: prefers(p, a, b)
+#
+# Ground facts, settled by arithmetic before the solver sees anything:
+#   pref(p, i, a, b)      voter i ranks a above b in p
+#   unanimous(p, a, b)    every voter ranks a above b in p
+#   condorcet(p, c)       c beats every other candidate head to head in p
+#   samepair(p, q, a, b)  every voter ranks a against b the same way in p and q
+#   neq(a, b)             two candidates are different
+#
+# Terms:
+#   sub(p, i, r)   p with voter i's ballot replaced by r
+#   lift(p, i, c)  p with c raised one place in voter i's ballot
+#   permc(p, s)    p with every candidate relabelled by s
+#   permv(p, t)    p with ballots reassigned between voters by t
+#   top(p, i)      voter i's first choice in p
+#   s(a)           the new label of a under candidate permutation s
+#   ranks(p, r)    the social ranking at p is exactly the ballot r
+#
+# prefers(p, a, a) is false: strict preference is irreflexive. Axioms that mean
+# distinct candidates must say so with neq.
+
+axiom pareto
+  modes swf scf
+  english if every voter ranks a above b, then so does society
+  swf forall p:profile, a:cand, b:cand. unanimous(p,a,b) -> prefers(p,a,b)
+  scf forall p:profile, a:cand, b:cand. unanimous(p,a,b) -> not wins(p,b)
+
+axiom nondictatorial
+  modes swf scf
+  english no one voter's ballot is always the outcome, whatever anyone else says
+  swf forall i:voter. exists p:profile, a:cand, b:cand. pref(p,i,a,b) and not prefers(p,a,b)
+  scf forall i:voter. exists p:profile. not wins(p, top(p,i))
+
+axiom surjective
+  modes swf scf
+  english every outcome is reachable: nothing is ruled out before the vote
+  swf forall r:ballot. exists p:profile. ranks(p,r)
+  scf forall c:cand. exists p:profile. wins(p,c)
+
+axiom strategyproof
+  modes scf
+  english no voter ever does better by submitting a ballot other than their true one
+  scf forall p:profile, i:voter, r:ballot, a:cand, b:cand. \
+        pref(p,i,a,b) -> not (wins(p,b) and wins(sub(p,i,r),a))
+
+axiom monotone
+  modes swf scf
+  english raising a candidate on one ballot never costs that candidate ground
+  swf forall p:profile, i:voter, a:cand, b:cand. prefers(p,a,b) -> prefers(lift(p,i,a),a,b)
+  scf forall p:profile, i:voter, c:cand. wins(p,c) -> wins(lift(p,i,c),c)
+
+axiom condorcet
+  modes swf scf
+  english a candidate who beats every other head to head comes first
+  swf forall p:profile, a:cand, b:cand. (condorcet(p,a) and neq(a,b)) -> prefers(p,a,b)
+  scf forall p:profile, c:cand. condorcet(p,c) -> wins(p,c)
+
+axiom iia
+  modes swf
+  english how society ranks a against b depends only on how the voters rank a against b
+  swf forall p:profile, q:profile, a:cand, b:cand. \
+        (neq(a,b) and samepair(p,q,a,b)) -> (prefers(p,a,b) <-> prefers(q,a,b))
+
+axiom anonymous
+  modes swf scf
+  english the outcome depends on which ballots were cast, not on who cast them
+  swf forall p:profile, t:vperm, a:cand, b:cand. prefers(p,a,b) <-> prefers(permv(p,t),a,b)
+  scf forall p:profile, t:vperm, c:cand. wins(p,c) <-> wins(permv(p,t),c)
+
+axiom neutral
+  modes swf scf
+  english relabelling the candidates relabels the outcome and changes nothing else
+  swf forall p:profile, s:cperm, a:cand, b:cand. prefers(p,a,b) <-> prefers(permc(p,s), s(a), s(b))
+  scf forall p:profile, s:cperm, c:cand. wins(p,c) <-> wins(permc(p,s), s(c))
