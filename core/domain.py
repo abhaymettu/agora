@@ -99,6 +99,10 @@ class Electorate:
         """Reassign ballots between voters by t: voter i now holds p[t[i]]."""
         return tuple(p[t[i]] for i in self.vs)
 
+    def rev(self, p: Profile) -> Profile:
+        """p with every ballot turned upside down."""
+        return tuple(tuple(reversed(b)) for b in p)
+
     def top(self, p: Profile, i: int) -> int:
         return p[i][0]
 
@@ -149,6 +153,32 @@ class Electorate:
             if self.condorcet(p, c):
                 return c
         return None
+
+    def condorcetloser(self, p: Profile, c: int) -> bool:
+        """Every other candidate beats c head to head."""
+        return all(self.beats(p, d, c) for d in self.cands if d != c)
+
+    @cached_property
+    def _tops(self) -> dict[Profile, tuple[int, ...]]:
+        return {p: tuple(b[0] for b in p) for p in self.profiles}
+
+    def majoritytop(self, p: Profile, c: int) -> bool:
+        """More than half the voters put c first."""
+        return 2 * self._tops[p].count(c) > self.voters
+
+    def sametops(self, p: Profile, q: Profile) -> bool:
+        """Every voter's first choice is the same in p and in q."""
+        return self._tops[p] == self._tops[q]
+
+    def improves(self, p: Profile, q: Profile, c: int) -> bool:
+        """No voter has moved c down against anyone between p and q.
+
+        The Maskin monotonic transformation: for every voter, whatever c beat on
+        that ballot in p, it still beats in q. Nothing is asked of pairs that do
+        not involve c.
+        """
+        mp, mq = self._mask[p], self._mask[q]
+        return all(mp[c][d] & ~mq[c][d] == 0 for d in self.cands if d != c)
 
 
 def _positions(b: Ballot) -> tuple[int, ...]:

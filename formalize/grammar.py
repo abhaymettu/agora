@@ -24,13 +24,18 @@ TERMS = {
     "permc": (("profile", "cperm"), "profile"),
     "permv": (("profile", "vperm"), "profile"),
     "top": (("profile", "voter"), "cand"),
+    "rev": (("profile",), "profile"),
 }
 
 FACTS = {
     "pref": ("profile", "voter", "cand", "cand"),
     "unanimous": ("profile", "cand", "cand"),
     "condorcet": ("profile", "cand"),
+    "condorcetloser": ("profile", "cand"),
+    "majoritytop": ("profile", "cand"),
     "samepair": ("profile", "profile", "cand", "cand"),
+    "sametops": ("profile", "profile"),
+    "improves": ("profile", "profile", "cand"),
     "neq": ("*", "*"),  # any two values of the same sort
 }
 

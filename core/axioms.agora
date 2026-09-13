@@ -76,3 +76,49 @@ axiom neutral
   english relabelling the candidates relabels the outcome and changes nothing else
   swf forall p:profile, s:cperm, a:cand, b:cand. prefers(p,a,b) <-> prefers(permc(p,s), s(a), s(b))
   scf forall p:profile, s:cperm, c:cand. wins(p,c) <-> wins(permc(p,s), s(c))
+
+# --- added for the discovery sweep -----------------------------------------
+#
+# More ground facts, same arithmetic-before-the-solver treatment:
+#   condorcetloser(p, c)  every other candidate beats c head to head
+#   majoritytop(p, c)     more than half the voters put c first
+#   sametops(p, q)        every voter's first choice is the same in p and q
+#   improves(p, q, c)     no voter moved c down against anyone, going p to q
+#
+# One more term:
+#   rev(p)                p with every ballot turned upside down
+
+axiom unanimity
+  modes swf scf
+  english a candidate every voter puts first comes out on top
+  swf forall p:profile, c:cand, d:cand. \
+        (neq(c,d) and (forall e:cand. neq(c,e) -> unanimous(p,c,e))) -> prefers(p,c,d)
+  scf forall p:profile, c:cand. \
+        (forall d:cand. neq(c,d) -> unanimous(p,c,d)) -> wins(p,c)
+
+axiom majority
+  modes swf scf
+  english a candidate put first by more than half the voters comes out on top
+  swf forall p:profile, c:cand, d:cand. (majoritytop(p,c) and neq(c,d)) -> prefers(p,c,d)
+  scf forall p:profile, c:cand. majoritytop(p,c) -> wins(p,c)
+
+axiom condorcetloser
+  modes swf scf
+  english a candidate who loses to every other head to head comes out last
+  swf forall p:profile, c:cand, d:cand. (condorcetloser(p,c) and neq(c,d)) -> prefers(p,d,c)
+  scf forall p:profile, c:cand. condorcetloser(p,c) -> not wins(p,c)
+
+axiom topsonly
+  modes scf
+  english only first choices count; the rest of every ballot is ignored
+  scf forall p:profile, q:profile, c:cand. sametops(p,q) -> (wins(p,c) <-> wins(q,c))
+
+axiom maskinmonotone
+  modes scf
+  english a winner nobody has demoted against anyone is still the winner
+  scf forall p:profile, q:profile, c:cand. (wins(p,c) and improves(p,q,c)) -> wins(q,c)
+
+axiom reversal
+  modes scf
+  english turning every ballot upside down never leaves the same candidate winning
+  scf forall p:profile, c:cand. wins(p,c) -> not wins(rev(p),c)

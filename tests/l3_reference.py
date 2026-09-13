@@ -353,6 +353,132 @@ def scf_neutral(E, L, wins):
                 )
 
 
+# -- the discovery-sweep additions, read a second way ----------------------
+#
+# Deliberately not the core's phrasing. Where the core says "c is unanimously
+# above every other candidate", this counts first places; where the core
+# quantifies over all pairs of profiles, this groups profiles by their first
+# places and chains through one representative. If the two readings agree on a
+# hand-built rule, the agreement is not a shared typo.
+
+
+def swf_unanimity(E, L, above):
+    for p in E.profiles:
+        for c in E.cands:
+            if any(b[0] != c for b in p):
+                continue
+            for d in E.cands:
+                if d == c:
+                    continue
+                yield (
+                    f"unanimity: everyone puts {NAMES[c]} first at {E.show_profile(p)} "
+                    f"and society does not rank it above {NAMES[d]}",
+                    above(p, c, d),
+                )
+
+
+def swf_majority(E, L, above):
+    for p in E.profiles:
+        for c in E.cands:
+            if 2 * sum(1 for b in p if b[0] == c) <= E.n:
+                continue
+            for d in E.cands:
+                if d == c:
+                    continue
+                yield (
+                    f"majority: most voters put {NAMES[c]} first at {E.show_profile(p)} "
+                    f"and society does not rank it above {NAMES[d]}",
+                    above(p, c, d),
+                )
+
+
+def swf_condorcetloser(E, L, above):
+    for p in E.profiles:
+        for c in E.cands:
+            if not all(E.beats(p, d, c) for d in E.cands if d != c):
+                continue
+            for d in E.cands:
+                if d == c:
+                    continue
+                yield (
+                    f"condorcetloser: {NAMES[c]} loses every head to head at "
+                    f"{E.show_profile(p)} and society does not rank {NAMES[d]} above it",
+                    above(p, d, c),
+                )
+
+
+def scf_unanimity(E, L, wins):
+    for p in E.profiles:
+        for c in E.cands:
+            if all(b[0] == c for b in p):
+                yield (
+                    f"unanimity: everyone puts {NAMES[c]} first at {E.show_profile(p)} "
+                    f"and it does not win",
+                    wins(p, c),
+                )
+
+
+def scf_majority(E, L, wins):
+    for p in E.profiles:
+        for c in E.cands:
+            if 2 * sum(1 for b in p if b[0] == c) > E.n:
+                yield (
+                    f"majority: most voters put {NAMES[c]} first at {E.show_profile(p)} "
+                    f"and it does not win",
+                    wins(p, c),
+                )
+
+
+def scf_condorcetloser(E, L, wins):
+    for p in E.profiles:
+        for c in E.cands:
+            if all(E.beats(p, d, c) for d in E.cands if d != c):
+                yield (
+                    f"condorcetloser: {NAMES[c]} loses every head to head at "
+                    f"{E.show_profile(p)} and still wins",
+                    L.not_(wins(p, c)),
+                )
+
+
+def scf_topsonly(E, L, wins):
+    groups = {}
+    for p in E.profiles:
+        groups.setdefault(tuple(b[0] for b in p), []).append(p)
+    for group in groups.values():
+        head = group[0]
+        for q in group[1:]:
+            for c in E.cands:
+                yield (
+                    f"topsonly: {E.show_profile(head)} and {E.show_profile(q)} have the "
+                    f"same first choices and disagree about {NAMES[c]}",
+                    L.iff(wins(head, c), wins(q, c)),
+                )
+
+
+def scf_maskinmonotone(E, L, wins):
+    for p in E.profiles:
+        for c in E.cands:
+            below = [(i, d) for i in E.vs for d in E.cands if d != c and E.pref(p, i, c, d)]
+            for q in E.profiles:
+                if not all(E.pref(q, i, c, d) for i, d in below):
+                    continue
+                yield (
+                    f"maskinmonotone: {NAMES[c]} wins {E.show_profile(p)}, nobody demoted "
+                    f"it going to {E.show_profile(q)}, and it loses there",
+                    L.implies(wins(p, c), wins(q, c)),
+                )
+
+
+def scf_reversal(E, L, wins):
+    for p in E.profiles:
+        q = tuple(tuple(reversed(b)) for b in p)
+        for c in E.cands:
+            yield (
+                f"reversal: {NAMES[c]} wins both {E.show_profile(p)} and its reverse",
+                L.implies(wins(p, c), L.not_(wins(q, c))),
+            )
+
+
 AXIOMS = {
     "swf": {
         "pareto": swf_pareto,
@@ -363,6 +489,9 @@ AXIOMS = {
         "iia": swf_iia,
         "anonymous": swf_anonymous,
         "neutral": swf_neutral,
+        "unanimity": swf_unanimity,
+        "majority": swf_majority,
+        "condorcetloser": swf_condorcetloser,
     },
     "scf": {
         "pareto": scf_pareto,
@@ -373,6 +502,12 @@ AXIOMS = {
         "condorcet": scf_condorcet,
         "anonymous": scf_anonymous,
         "neutral": scf_neutral,
+        "unanimity": scf_unanimity,
+        "majority": scf_majority,
+        "condorcetloser": scf_condorcetloser,
+        "topsonly": scf_topsonly,
+        "maskinmonotone": scf_maskinmonotone,
+        "reversal": scf_reversal,
     },
 }
 

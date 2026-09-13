@@ -8,6 +8,8 @@ the gates, both of which decide without one.
 import json
 import threading
 import unittest
+
+from core import library
 import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
@@ -45,7 +47,7 @@ class Endpoints(unittest.TestCase):
 
     def test_the_catalogue_carries_every_axiom_with_its_modes_and_gloss(self):
         cat = self.get("/api/axioms")
-        self.assertEqual(len(cat["axioms"]), 9)
+        self.assertEqual(len(cat["axioms"]), len(library()))
         for a in cat["axioms"]:
             self.assertTrue(a["english"] and a["modes"])
         self.assertTrue(cat["sizes"])

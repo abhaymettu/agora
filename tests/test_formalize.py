@@ -14,7 +14,7 @@ from formalize.model import health, reference
 
 
 class TheLibraryIsTheCorpus(unittest.TestCase):
-    """Whatever the checker does, it must not reject the nine axioms that ship."""
+    """Whatever the checker does, it must not reject the axioms that ship."""
 
     def test_every_library_axiom_typechecks_in_every_mode_it_claims(self):
         for name, ax in library().items():

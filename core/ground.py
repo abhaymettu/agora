@@ -152,8 +152,18 @@ def estimate_vars(voters: int, candidates: int, mode: str) -> int:
 
 # -- grounding --------------------------------------------------------------
 
-_FACTS = {"pref": 4, "unanimous": 3, "condorcet": 2, "samepair": 4, "neq": 2}
-_TERMS = {"sub": 3, "lift": 3, "permc": 2, "permv": 2, "top": 2}
+_FACTS = {
+    "pref": 4,
+    "unanimous": 3,
+    "condorcet": 2,
+    "condorcetloser": 2,
+    "majoritytop": 2,
+    "samepair": 4,
+    "sametops": 2,
+    "improves": 3,
+    "neq": 2,
+}
+_TERMS = {"sub": 3, "lift": 3, "permc": 2, "permv": 2, "rev": 1, "top": 2}
 _ATOMS = {"wins": ("scf", 2), "prefers": ("swf", 3), "ranks": ("swf", 2)}
 
 
