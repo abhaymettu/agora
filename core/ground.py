@@ -27,14 +27,20 @@ class GroundError(Exception):
     pass
 
 
-class GroundTimeout(Exception):
-    """The formula was still being built when the budget ran out.
+class EncodingBudget(Exception):
+    """The formula ran out of time or out of room before the solver saw it.
 
-    Grounding is Python, not Z3, so a solver timeout cannot interrupt it. A
+    Grounding is Python, not Z3, so a solver timeout cannot interrupt it: a
     quantifier over pairs of profiles is quadratic, and at four candidates and
-    three voters that is billions of iterations. This is how the budget is kept
-    even when nothing has reached the solver yet.
+    three voters that is billions of iterations. Assembling the result costs
+    again, about seven seconds per million clauses. Both are budgeted here, so
+    that a run which cannot finish says so instead of disappearing.
     """
+
+
+# Assembling a conjunction costs roughly seven seconds per million clauses, and
+# anything this large has no chance in the solver anyway.
+MAX_CLAUSES = 2_000_000
 
 
 # -- boolean constructors that fold Python bools ---------------------------
@@ -238,8 +244,13 @@ def _ground_quant(node: dsl.Quant, ctx: Context, env: dict):
         for combo in product(*domains):
             ticks += 1
             if ctx.deadline is not None and not ticks % 65536 and time.perf_counter() > ctx.deadline:
-                raise GroundTimeout(
-                    f"still expanding forall over {len(domains)} sorts after the budget ran out"
+                raise EncodingBudget(
+                    f"still expanding {node.kind} over {len(domains)} sorts "
+                    f"after the time budget ran out"
+                )
+            if len(parts) > MAX_CLAUSES:
+                raise EncodingBudget(
+                    f"one {node.kind} alone passed {MAX_CLAUSES:,} clauses"
                 )
             for n, v in zip(names, combo):
                 env[n] = v

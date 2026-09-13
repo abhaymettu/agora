@@ -25,13 +25,16 @@ import z3
 from . import rules
 from .domain import Electorate
 from .dsl import Axiom, parse_axioms
-from .ground import Context, GroundTimeout, encode, estimate_vars, frame
+from .ground import Context, EncodingBudget, encode, estimate_vars, frame
 
 AXIOM_FILE = Path(__file__).with_name("axioms.agora")
 
-# Above this the encoding is too large to build, let alone solve. Refusing up
-# front beats swapping for ten minutes and then reporting a timeout.
-MAX_VARS = 1_500_000
+# Above this the encoding is too large to build, let alone solve. The largest
+# size actually in scope is a ranking rule over three voters and four
+# candidates, at 165,888 variables; four voters and four candidates is 1.3
+# million and hopeless. Refusing up front beats spending ten minutes laying out
+# variables and majority margins before the first budget check can fire.
+MAX_VARS = 300_000
 
 _library: dict[str, Axiom] | None = None
 
@@ -150,12 +153,12 @@ def derive(
             s = z3.Bool(f"sel!{ax.name}", ctx.z3ctx)
             sel[ax.name] = s
             solver.add(z3.Implies(s, encode(ax, ctx)))
-    except GroundTimeout as exc:
+    except EncodingBudget as exc:
         base.elapsed = time.perf_counter() - started
         base.note = (
-            f"the encoding itself did not finish inside {timeout:g}s over {profiles:,} "
-            f"profiles ({exc}); the solver was never reached, so nothing is claimed "
-            f"either way at this size"
+            f"the encoding did not fit the budget over {profiles:,} profiles "
+            f"({exc}); the solver was never reached, so nothing is claimed either "
+            f"way at this size"
         )
         return _degraded(base, axioms, mode, timeout, minimise, verify) if degrade else base
 

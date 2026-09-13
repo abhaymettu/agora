@@ -1,5 +1,4 @@
 mode  size     profiles  variables status     seconds  note
 scf   2v3c           36        108 unsat         0.07  
-scf   3v3c          216        648 unsat         0.57  
-scf   4v3c        1,296      3,888 unsat         5.10  
-scf   2v4c          576      2,304 unsat         8.01  
+scf   3v3c          216        648 unsat         0.60  
+scf   4v3c        1,296      3,888 unsat         5.18  
