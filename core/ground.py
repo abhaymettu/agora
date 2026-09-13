@@ -267,3 +267,28 @@ def frame(ctx: Context):
                     )
                 )
     return out
+
+
+class ConcreteContext(Context):
+    """A context whose variables are already decided.
+
+    Grounding an axiom against one of these returns a Python bool rather than a
+    formula, so a rule the solver handed back can be re-checked without the
+    solver. That is what makes the constructive branch inspectable instead of
+    merely reported.
+    """
+
+    def __init__(self, elec: Electorate, mode: str, table: dict) -> None:
+        self.elec = elec
+        self.mode = mode
+        self.table = table
+        self.vars = {}
+
+    def wins(self, p, c):
+        return self.table[p] == c
+
+    def prefers(self, p, a, b):
+        if a == b:
+            return False
+        r = self.table[p]
+        return r.index(a) < r.index(b)
