@@ -65,6 +65,14 @@ result, here". AGORA answers a different question with a different quantifier: o
 *all* profiles of the electorate, does any rule at all satisfy these axioms? One
 explains a decision. The other synthesises a rule or refutes its existence.
 
+**"Under a minute" holds for most of the range, not all of it.** Three candidates at two
+or three voters is well under a second. Four voters at three candidates takes about 77
+seconds for a ranking rule, and two voters at four candidates about 49, so the default
+60 second budget returns `unknown` on the first of those rather than an answer. Four
+candidates at three voters does not finish at all: the encoding passes two million
+clauses before the solver is reached, and the machine says so instead of hanging.
+Measured numbers per size are in `notes/timings.txt`.
+
 **What it does not do.** Ties, indifference, and irresolute rules are out of scope:
 ballots and social rankings are strict, and a voting rule elects exactly one winner.
 There are no domain restrictions, so no single-peaked preferences. Nine axioms, listed
