@@ -8,7 +8,7 @@ tags:
   - computational social choice
 authors:
   - name: Abhay Mettu
-    # orcid: 0000-0000-0000-0000   # TODO: register an ORCID and fill in before submission
+    orcid: 0009-0001-2434-353X
     affiliation: 1
 affiliations:
   - name: Independent researcher
