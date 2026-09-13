@@ -178,13 +178,14 @@ def serve(port: int = PORT) -> None:
             f"port {port} is already taken ({exc.strerror.lower()}). Either stop what is on it "
             f"or run with AGORA_PORT=8001."
         ) from None
-    print(f"agora on http://127.0.0.1:{port}   (ctrl-c to stop)")
+    print(f"agora on http://127.0.0.1:{port}   (ctrl-c to stop)", flush=True)
     backend = health()
     print(
         f"model backend: {backend['backend']} "
         f"({'grammar-constrained' if backend.get('grammar') else 'json-schema only'})"
         if backend.get("backend")
-        else f"model backend: none. {backend.get('note', '')} Free-form entry will say so."
+        else f"model backend: none. {backend.get('note', '')} Free-form entry will say so.",
+        flush=True,
     )
     try:
         server.serve_forever()
