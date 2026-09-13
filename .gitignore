@@ -19,3 +19,7 @@ __pycache__/
 # Sweep stdout transcripts. The .jsonl records beside them carry the same runs,
 # with more in each row; these are regenerable by re-running notes/discover.py.
 notes/discovery/*.log
+
+# `pip install .` builds in place and leaves these behind.
+agora.egg-info/
+build/

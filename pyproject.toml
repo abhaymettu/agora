@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agora"
+version = "0.1.0"
+description = "Derive voting rules and impossibilities from axioms"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Abhay Mettu" }]
+dependencies = ["z3-solver"]
+
+[project.urls]
+Homepage = "https://github.com/abhaymettu/agora"
+
+[tool.setuptools]
+packages = ["core", "formalize", "web"]
+
+[tool.setuptools.package-data]
+core = ["axioms.agora"]
+web = ["index.html", "app.js", "style.css"]
