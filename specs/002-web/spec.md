@@ -59,6 +59,6 @@ before accepting.
 ## Constraints
 
 - Offline. No paid API, no network at request time.
-- The core is read-only to this lane. A bug found there is reported, not patched.
+- The core is read-only from here. A bug found there is reported, not patched.
 - One viewport, works on a phone, colourblind-safe: outcome is never carried by hue
   alone. OLED black.
