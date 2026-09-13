@@ -1,0 +1,150 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - heading "AGORA" [level=1] [ref=e3]
+    - paragraph [ref=e4]: Name the properties a fair voting rule should have. The machine either hands you a rule that provably has all of them, or a proof that no such rule can exist.
+    - generic [ref=e5]:
+      - heading "Kind of rule" [level=2] [ref=e6]
+      - group "Kind of rule" [ref=e7]:
+        - button "elects one winner" [pressed] [ref=e8] [cursor=pointer]
+        - button "produces a ranking" [ref=e9] [cursor=pointer]
+    - generic [ref=e10]:
+      - heading "Electorate" [level=2] [ref=e11]
+      - combobox "Electorate size" [ref=e12]:
+        - option "2 voters, 3 candidates — instant" [selected]
+        - option "3 voters, 3 candidates — a few seconds"
+        - option "2 voters, 4 candidates — up to a minute"
+        - option "4 voters, 3 candidates — often undecided inside the budget"
+    - generic [ref=e13]:
+      - heading "Properties" [level=2] [ref=e14]
+      - generic [ref=e15]:
+        - button "pareto if every voter ranks a above b, then so does society" [ref=e129] [cursor=pointer]:
+          - generic [ref=e131]:
+            - text: pareto
+            - generic [ref=e132]: if every voter ranks a above b, then so does society
+        - button "✓ nondictatorial no one voter's ballot is always the outcome, whatever anyone else says" [pressed] [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]: ✓
+          - generic [ref=e135]:
+            - text: nondictatorial
+            - generic [ref=e136]: no one voter's ballot is always the outcome, whatever anyone else says
+        - 'button "surjective every outcome is reachable: nothing is ruled out before the vote" [ref=e137] [cursor=pointer]':
+          - generic [ref=e139]:
+            - text: surjective
+            - generic [ref=e140]: "every outcome is reachable: nothing is ruled out before the vote"
+        - button "strategyproof no voter ever does better by submitting a ballot other than their true one" [ref=e141] [cursor=pointer]:
+          - generic [ref=e143]:
+            - text: strategyproof
+            - generic [ref=e144]: no voter ever does better by submitting a ballot other than their true one
+        - button "monotone raising a candidate on one ballot never costs that candidate ground" [ref=e145] [cursor=pointer]:
+          - generic [ref=e147]:
+            - text: monotone
+            - generic [ref=e148]: raising a candidate on one ballot never costs that candidate ground
+        - button "condorcet a candidate who beats every other head to head comes first" [ref=e149] [cursor=pointer]:
+          - generic [ref=e151]:
+            - text: condorcet
+            - generic [ref=e152]: a candidate who beats every other head to head comes first
+        - button "iia only defined for a rule that produces a ranking" [disabled] [ref=e153]:
+          - generic [ref=e155]:
+            - text: iia
+            - generic [ref=e156]: only defined for a rule that produces a ranking
+        - button "anonymous the outcome depends on which ballots were cast, not on who cast them" [ref=e157] [cursor=pointer]:
+          - generic [ref=e159]:
+            - text: anonymous
+            - generic [ref=e160]: the outcome depends on which ballots were cast, not on who cast them
+        - button "neutral relabelling the candidates relabels the outcome and changes nothing else" [ref=e161] [cursor=pointer]:
+          - generic [ref=e163]:
+            - text: neutral
+            - generic [ref=e164]: relabelling the candidates relabels the outcome and changes nothing else
+    - generic [ref=e52]:
+      - heading "Invent one" [level=2] [ref=e53]
+      - textbox "a candidate that everyone puts last should never win" [ref=e54]
+      - generic [ref=e55]:
+        - generic [ref=e56]: llama.cpp
+        - generic [ref=e57]: grammar-constrained
+        - generic [ref=e58]: local, offline
+      - button "Formalise it" [ref=e60] [cursor=pointer]
+    - button "Mint" [ref=e61] [cursor=pointer]
+  - main [ref=e62]:
+    - generic [ref=e165]:
+      - generic [ref=e166]:
+        - generic [ref=e167]: ●
+        - heading "A rule exists." [level=3] [ref=e168]
+      - paragraph [ref=e169]:
+        - text: Over 2 voters and 3 candidates, a rule that elects one winner and has every property you asked for. It is
+        - strong [ref=e170]: the constant rule that always elects A
+        - text: .
+    - generic [ref=e171]:
+      - heading "What you asked for" [level=2] [ref=e172]
+      - generic [ref=e174]:
+        - generic [ref=e175]: nondictatorial
+        - generic [ref=e176]: no one voter's ballot is always the outcome, whatever anyone else says
+    - generic [ref=e177]:
+      - heading "Try it on an election" [level=2] [ref=e178]
+      - generic [ref=e179]:
+        - generic [ref=e180]:
+          - generic [ref=e181]:
+            - generic [ref=e182]: v1
+            - combobox "v1" [ref=e183]:
+              - option "A > B > C" [selected]
+              - option "A > C > B"
+              - option "B > A > C"
+              - option "B > C > A"
+              - option "C > A > B"
+              - option "C > B > A"
+          - generic [ref=e184]:
+            - generic [ref=e185]: v2
+            - combobox "v2" [ref=e186]:
+              - option "A > B > C"
+              - option "A > C > B" [selected]
+              - option "B > A > C"
+              - option "B > C > A"
+              - option "C > A > B"
+              - option "C > B > A"
+        - generic [ref=e187]:
+          - button "Random election" [ref=e188] [cursor=pointer]
+          - button "Find a disagreement" [ref=e189] [cursor=pointer]
+        - generic [ref=e190]:
+          - generic [ref=e191]:
+            - generic [ref=e192]: your rule elects
+            - generic [ref=e193]: A
+            - generic [ref=e194]: ✓ agrees with all three
+          - generic [ref=e195]:
+            - generic [ref=e196]:
+              - generic [ref=e197]: plurality
+              - text: A
+            - generic [ref=e198]:
+              - generic [ref=e199]: borda
+              - text: A
+            - generic [ref=e200]:
+              - generic [ref=e201]: condorcet winner
+              - text: A
+    - generic [ref=e202]:
+      - heading "The rule, in full — 36 profiles" [level=2] [ref=e203]
+      - generic [ref=e204]:
+        - generic [ref=e205]:
+          - generic [ref=e206]: "v1: A > B > C | v2: A > B > C"
+          - generic [ref=e207]: A
+        - generic [ref=e208]:
+          - generic [ref=e209]: "v1: A > B > C | v2: A > C > B"
+          - generic [ref=e210]: A
+        - generic [ref=e211]:
+          - generic [ref=e212]: "v1: A > B > C | v2: B > A > C"
+          - generic [ref=e213]: A
+        - generic [ref=e214]:
+          - generic [ref=e215]: "v1: A > B > C | v2: B > C > A"
+          - generic [ref=e216]: A
+        - generic [ref=e217]:
+          - generic [ref=e218]: "v1: A > B > C | v2: C > A > B"
+          - generic [ref=e219]: A
+        - generic [ref=e220]:
+          - generic [ref=e221]: "v1: A > B > C | v2: C > B > A"
+          - generic [ref=e222]: A
+        - generic [ref=e223]:
+          - generic [ref=e224]: "v1: A > C > B | v2: A > B > C"
+          - generic [ref=e225]: A
+        - generic [ref=e226]:
+          - generic [ref=e227]: "v1: A > C > B | v2: A > C > B"
+          - generic [ref=e228]: A
+      - paragraph [ref=e229]: 28 more, all decided. Every one of them is in the table the playground above reads from.
+    - paragraph [ref=e230]: Searched all 36 profiles of this electorate, 108 variables, in 0.01s. Every rule shown was re-checked against its properties without the solver.
+    - group [ref=e231]:
+      - generic "What this result does and does not claim" [ref=e232] [cursor=pointer]

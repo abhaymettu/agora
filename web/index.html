@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AGORA</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:,">
+</head>
+<body>
+
+<section class="pane ask">
+  <h1>AGORA</h1>
+  <p class="lede">
+    Name the properties a fair voting rule should have. The machine either hands you a
+    rule that provably has all of them, or a proof that no such rule can exist.
+  </p>
+
+  <div class="field">
+    <h2>Kind of rule</h2>
+    <div class="segmented" id="mode" role="group" aria-label="Kind of rule">
+      <button data-mode="scf" aria-pressed="true">elects one winner</button>
+      <button data-mode="swf" aria-pressed="false">produces a ranking</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <h2>Electorate</h2>
+    <select id="size" aria-label="Electorate size"></select>
+  </div>
+
+  <div class="field">
+    <h2>Properties</h2>
+    <div class="axioms" id="axioms"></div>
+  </div>
+
+  <div class="field">
+    <h2>Invent one</h2>
+    <textarea id="invent" placeholder="a candidate that everyone puts last should never win"></textarea>
+    <div class="chips" id="model-state"><span class="chip">checking for a local model</span></div>
+    <div style="margin-top:8px"><button class="small" id="formalize">Formalise it</button></div>
+    <div id="formalize-out"></div>
+  </div>
+
+  <button class="go" id="mint">Mint</button>
+  <div class="err" id="ask-error" hidden></div>
+</section>
+
+<main class="pane stage" id="stage">
+  <div class="empty">
+    <div class="mark">&#9671;</div>
+    <div>Pick some properties, then mint.</div>
+    <div class="faint" style="font-size:12px">Arrow's theorem: ranking rule, pareto + iia + nondictatorial.</div>
+  </div>
+</main>
+
+<template id="tpl-honest">
+  <details class="honest">
+    <summary>What this result does and does not claim</summary>
+    <p>
+      Everything here is established by searching every profile of one fixed electorate,
+      so it is a statement about that many voters and that many candidates: a base-case
+      lemma, not a theorem about every electorate. Lifting it is a separate argument the
+      machine does not make.
+    </p>
+    <p>
+      When a rule exists you get the rule, not a yes: the whole outcome table, runnable on
+      any profile below, named if it happens to be a rule someone has written down, and
+      re-checked against every property you asked for without going back through the solver.
+    </p>
+    <p>
+      This is the existence question, not the explanation question. There is a line of work
+      out of the ILLC on justifying collective decisions: fix one profile, fix the outcome a
+      rule produced, and explain why that outcome follows from a chosen set of axioms there.
+      That answers "why this result, here". AGORA quantifies the other way: over all profiles
+      of the electorate, does any rule at all satisfy these properties?
+    </p>
+  </details>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>

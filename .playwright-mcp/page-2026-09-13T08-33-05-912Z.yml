@@ -1,0 +1,69 @@
+- generic [active] [ref=f4e1]:
+  - generic [ref=f4e2]:
+    - heading "AGORA" [level=1] [ref=f4e3]
+    - paragraph [ref=f4e4]: Name the properties a fair voting rule should have. The machine either hands you a rule that provably has all of them, or a proof that no such rule can exist.
+    - generic [ref=f4e5]:
+      - heading "Kind of rule" [level=2] [ref=f4e6]
+      - group "Kind of rule" [ref=f4e7]:
+        - button "elects one winner" [pressed] [ref=f4e8] [cursor=pointer]
+        - button "produces a ranking" [ref=f4e9] [cursor=pointer]
+    - generic [ref=f4e10]:
+      - heading "Electorate" [level=2] [ref=f4e11]
+      - combobox "Electorate size" [ref=f4e12]:
+        - option "2 voters, 3 candidates — instant" [selected]
+        - option "3 voters, 3 candidates — a few seconds"
+        - option "2 voters, 4 candidates — up to a minute"
+        - option "4 voters, 3 candidates — often undecided inside the budget"
+    - generic [ref=f4e13]:
+      - heading "Properties" [level=2] [ref=f4e14]
+      - generic [ref=f4e15]:
+        - button "pareto if every voter ranks a above b, then so does society" [ref=f4e16] [cursor=pointer]:
+          - generic [ref=f4e18]:
+            - text: pareto
+            - generic [ref=f4e19]: if every voter ranks a above b, then so does society
+        - button "nondictatorial no one voter's ballot is always the outcome, whatever anyone else says" [ref=f4e20] [cursor=pointer]:
+          - generic [ref=f4e22]:
+            - text: nondictatorial
+            - generic [ref=f4e23]: no one voter's ballot is always the outcome, whatever anyone else says
+        - 'button "surjective every outcome is reachable: nothing is ruled out before the vote" [ref=f4e24] [cursor=pointer]':
+          - generic [ref=f4e26]:
+            - text: surjective
+            - generic [ref=f4e27]: "every outcome is reachable: nothing is ruled out before the vote"
+        - button "strategyproof no voter ever does better by submitting a ballot other than their true one" [ref=f4e28] [cursor=pointer]:
+          - generic [ref=f4e30]:
+            - text: strategyproof
+            - generic [ref=f4e31]: no voter ever does better by submitting a ballot other than their true one
+        - button "monotone raising a candidate on one ballot never costs that candidate ground" [ref=f4e32] [cursor=pointer]:
+          - generic [ref=f4e34]:
+            - text: monotone
+            - generic [ref=f4e35]: raising a candidate on one ballot never costs that candidate ground
+        - button "condorcet a candidate who beats every other head to head comes first" [ref=f4e36] [cursor=pointer]:
+          - generic [ref=f4e38]:
+            - text: condorcet
+            - generic [ref=f4e39]: a candidate who beats every other head to head comes first
+        - button "iia only defined for a rule that produces a ranking" [disabled] [ref=f4e40]:
+          - generic [ref=f4e42]:
+            - text: iia
+            - generic [ref=f4e43]: only defined for a rule that produces a ranking
+        - button "anonymous the outcome depends on which ballots were cast, not on who cast them" [ref=f4e44] [cursor=pointer]:
+          - generic [ref=f4e46]:
+            - text: anonymous
+            - generic [ref=f4e47]: the outcome depends on which ballots were cast, not on who cast them
+        - button "neutral relabelling the candidates relabels the outcome and changes nothing else" [ref=f4e48] [cursor=pointer]:
+          - generic [ref=f4e50]:
+            - text: neutral
+            - generic [ref=f4e51]: relabelling the candidates relabels the outcome and changes nothing else
+    - generic [ref=f4e52]:
+      - heading "Invent one" [level=2] [ref=f4e53]
+      - textbox "a candidate that everyone puts last should never win" [ref=f4e54]
+      - generic [ref=f4e55]:
+        - generic [ref=f4e56]: llama.cpp
+        - generic [ref=f4e57]: grammar-constrained
+        - generic [ref=f4e58]: local, offline
+      - button "Formalise it" [ref=f4e60] [cursor=pointer]
+    - button "Mint" [ref=f4e61] [cursor=pointer]
+  - main [ref=f4e62]:
+    - generic [ref=f4e63]:
+      - generic [ref=f4e64]: ◇
+      - generic [ref=f4e65]: Pick some properties, then mint.
+      - generic [ref=f4e66]: "Arrow's theorem: ranking rule, pareto + iia + nondictatorial."

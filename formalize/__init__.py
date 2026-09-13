@@ -179,7 +179,7 @@ def _gate(p: Proposal, step: str, run, kind, headline: str):
         p.why = f"{headline}: {exc}" if headline else str(exc)
         p.gates.append({"step": step, "passed": False, "note": str(exc)})
         return _FAILED
-    p.gates.append({"step": step, "passed": True, "note": ""})
+    p.gates.append({"step": step, "passed": True, "note": "clear"})
     return value
 
 
